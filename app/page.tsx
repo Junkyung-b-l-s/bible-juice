@@ -338,7 +338,7 @@ export default function Home() {
 
       {/* Fixed Logo / Wordmark + Navigation */}
       {/* Fixed Logo / Wordmark (Left) */}
-      <div style={{
+      <div className="header-logo" style={{
         position: 'fixed', top: 24, left: 32, zIndex: 100,
         display: 'flex', alignItems: 'center', gap: 24
       }}>
@@ -351,7 +351,7 @@ export default function Home() {
       </div>
 
       {/* About Link (Right) */}
-      <div style={{
+      <div className="header-about" style={{
         position: 'fixed', top: 24, right: 32, zIndex: 100,
         display: 'flex', alignItems: 'center', gap: 24
       }}>
@@ -378,7 +378,7 @@ export default function Home() {
           </header>
 
           {/* Input Section */}
-          <section className="glass fade-in" style={{
+          <section className="glass fade-in mobile-padding" style={{
             padding: '48px', borderRadius: 40, marginBottom: 80,
             boxShadow: '0 20px 50px rgba(69, 96, 60, 0.12)'
           }}>

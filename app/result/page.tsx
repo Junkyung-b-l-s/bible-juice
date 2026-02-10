@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useReflection, Verse } from "@/context/ReflectionContext";
@@ -174,7 +174,7 @@ function VerseCard({
 
 // --- Result Page ---
 
-export default function ResultPage() {
+function ResultContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const q = searchParams.get("q");
@@ -401,5 +401,16 @@ export default function ResultPage() {
                 💌 개발자에게 바란다
             </a>
         </main>
+    );
+}
+export default function ResultPage() {
+    return (
+        <Suspense fallback={
+            <main style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="serif" style={{ color: 'rgb(69, 96, 60)', fontSize: 24, animate: 'pulse 2s infinite' }}>기다리는 중...</div>
+            </main>
+        }>
+            <ResultContent />
+        </Suspense>
     );
 }

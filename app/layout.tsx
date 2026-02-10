@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Bible Juice',
     images: [
       {
-        url: '/hero.png', // Fallback image
+        url: '/og-image.png',
         width: 1200,
         height: 630,
       },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Bible Juice",
     description: "당신의 상황에 딱 맞는 하나님의 말씀을 찾아드립니다.",
-    images: ['/hero.png'],
+    images: ['/og-image.png'],
   },
 };
 

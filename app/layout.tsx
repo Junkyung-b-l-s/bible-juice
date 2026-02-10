@@ -13,20 +13,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?
+  `https://${process.env.NEXT_PUBLIC_APP_URL}` :
+  (process.env.RAILWAY_STATIC_URL ? `https://${process.env.RAILWAY_STATIC_URL}` : 'https://bible-juice.com');
+
 export const metadata: Metadata = {
   title: "Bible Juice | 당신을 위한 맞춤 말씀 처방",
   description: "두려움, 불안, 우울... 당신의 상황에 딱 맞는 하나님의 말씀을 찾아드립니다. 성경으로 마음의 평안을 얻으세요.",
-  metadataBase: new URL('https://bible-juice.com'),
+  metadataBase: new URL(baseUrl),
   openGraph: {
     title: "Bible Juice | 당신을 위한 맞춤 말씀 처방",
     description: "당신의 상황에 딱 맞는 하나님의 말씀을 찾아드립니다.",
-    url: 'https://bible-juice.com',
+    url: baseUrl,
     siteName: 'Bible Juice',
     images: [
       {
         url: '/og-image.png',
-        width: 1200,
-        height: 630,
+        width: 1024,
+        height: 1024,
       },
     ],
     locale: 'ko_KR',

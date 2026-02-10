@@ -1,28 +1,47 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useReflection } from "@/context/ReflectionContext";
+import { ConfirmationModal } from "./ConfirmationModal";
 
 export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const { resetReflection } = useReflection();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleLogoClick = (e: React.MouseEvent) => {
-        // If on Result page, confirm before leaving
-        if (pathname === "/result") {
+        // If on Result or Verse page, confirm before leaving as it resets context
+        if (pathname === "/result" || pathname?.startsWith("/verse/")) {
             e.preventDefault();
-            const confirmed = window.confirm("첫 화면으로 돌아가시겠어요?\n(지금까지의 묵상 내용은 사라집니다)");
-            if (confirmed) {
-                resetReflection();
-                router.push("/");
-            }
+            setIsModalOpen(true);
         }
+    };
+
+    const handleConfirm = () => {
+        setIsModalOpen(false);
+        // Navigate first to ensure smooth transition
+        router.push("/", { scroll: true });
+        // Small delay before resetting context to avoid flickering or layout jump on current page
+        setTimeout(() => {
+            resetReflection();
+        }, 100);
     };
 
     return (
         <>
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleConfirm}
+                title="첫 화면으로 돌아가시겠어요?"
+                description={"지금까지 묵상하신 내용은 사라집니다.\n새로운 은혜를 구하시겠습니까?"}
+                confirmText="돌아가기"
+                cancelText="아니요"
+            />
+
             {/* Fixed Logo / Wordmark (Left) */}
             <div className="header-logo" style={{
                 position: 'fixed', top: 24, left: 32, zIndex: 100,

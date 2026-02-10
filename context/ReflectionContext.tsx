@@ -23,6 +23,7 @@ export type AnalyzeResult = {
     suggested_keywords: string[];
     theological_themes: string[];
     situation_class_ids: string[];
+    recommended_verses: string[];
     confidence: number;
 };
 

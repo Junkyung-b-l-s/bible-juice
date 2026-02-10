@@ -14,8 +14,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Bible Juice",
-  description: "말씀으로 삶을 가꾸는 당신을 위한 동반자",
+  title: "Bible Juice | 당신을 위한 맞춤 말씀 처방",
+  description: "두려움, 불안, 우울... 당신의 상황에 딱 맞는 하나님의 말씀을 찾아드립니다. 성경으로 마음의 평안을 얻으세요.",
+  metadataBase: new URL('https://bible-juice.com'),
+  openGraph: {
+    title: "Bible Juice | 당신을 위한 맞춤 말씀 처방",
+    description: "당신의 상황에 딱 맞는 하나님의 말씀을 찾아드립니다.",
+    url: 'https://bible-juice.com',
+    siteName: 'Bible Juice',
+    images: [
+      {
+        url: '/hero.png', // Fallback image
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Bible Juice",
+    description: "당신의 상황에 딱 맞는 하나님의 말씀을 찾아드립니다.",
+    images: ['/hero.png'],
+  },
 };
 
 export default function RootLayout({

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { SITUATION_VERSE_MAP_EXPANDED_V1 } from "@/data/situationVerseMap.expanded";
+import { supabase } from "@/lib/supabase";
 
 type AnalyzeResult = {
   intent_summary: string;
@@ -8,6 +9,7 @@ type AnalyzeResult = {
   suggested_keywords: string[];
   theological_themes: string[];
   situation_class_ids: string[];
+  recommended_verses: string[]; // New: specific verse references (e.g. "시91:11")
   confidence: number;
 };
 
@@ -47,9 +49,20 @@ export async function POST(req: Request) {
               content: `당신은 사용자 자연어 입력을 분석하고 깊은 영적·심리적 상태로 분류하는 성경 상담 도우미입니다.
               
 단순한 키워드 매칭을 넘어, 다음의 미묘한 정서를 구분해 주세요:
+
+1. **부정적 상황**:
 - 단순히 바쁜 상태인가(업무량), 아니면 인간관계에서 오는 억울함이나 미움(상사/동료 피로감)인가?
-- 후자라면 반드시 '분노·원망·용서(ANGER_BITTERNESS_FORGIVENESS)'나 '억울함·불공정(INJUSTICE_UNFAIRNESS)' ID를 우선적으로 고려하세요.
+- 후자라면 반드시 '분노·원망·용서', '억울함·불공정', '배신·사람에게 상처' ID를 우선 고려하세요.
 - 사용자가 "자기도 못하면서"와 같이 상대에 대한 판단이나 짜증을 표현한다면 이는 관계적 상처와 용서의 주제가 핵심입니다.
+- **교통사고, 소송, 불면증, 시험 망함** 등 구체적 사건은 반드시 해당 ID(TRAFFIC_ACCIDENT..., LAWSUIT..., INSOMNIA..., EXAM...)를 선택하세요.
+- 그리고 **그 상황에 딱 맞는 'recommended_verses'를 1~2개 직접 추천해주세요.** (예: 사고->시91:11, 불면->시4:8, 수술->사41:10)
+
+2. **긍정적 상황 (축복/감사)**:
+- 승진, 합격, 결혼, 임신, 출산, 질병 치유, 생일, 재정 해결 등 기쁜 소식이라면 반드시 긍정적 ID(PROMOTION..., MARRIAGE..., CHILDBIRTH..., HEALING_RECOVERY...)를 선택하세요.
+- 이때는 '축복', '감사', '겸손'의 메시지가 담긴 말씀을 추천해주세요.
+
+3. **숨은 보석 (Hidden Gems)**:
+- 너무 유명한 말씀(예: 빌4:13, 요3:16)도 좋지만, 상황에 **정확히 부합하는 덜 알려진 보석 같은 말씀**이 있다면 'recommended_verses'에 포함시켜 주세요.
 
 아래는 사용 가능한 상황 유형(id) 목록입니다. 가장 어울리는 id를 1~2개 선택하세요:
 
@@ -59,16 +72,18 @@ ${SITUATION_VERSE_MAP_EXPANDED_V1.map(
               ).join("\n")}
 
 또한 다음 정보도 JSON으로 추출하세요:
-- intent_summary: 성도님의 마음을 공감하며 한 문장으로 요약 (목회적 따뜻함 유지)
+- intent_summary: 성도님의 마음을 공감하며 한 문장으로 요약 (목회적 따뜻함 유지. 긍정적 상황이면 축하와 감사의 어조로)
 - sentiments: 핵심 감정 2~3개
 - situations: 구체적인 상황 키워드
-- suggested_keywords: UI 표시용 (예: #용서 #인내 #억울함)
+- suggested_keywords: UI 표시용 (예: #용서 #인내 #억울함 #축하 #감사)
 - theological_themes: 관련된 영적/신학적 주제
+- recommended_verses: 상황에 딱 맞는 성경장절(ref_key) 1~2개. (포맷: "시91:11", "잠16:9" 등. 없으면 빈 배열)
 - confidence: 확신도 (0~1)
 
 응답 형식 (JSON):
 {
   "situation_class_ids": ["ID1", "ID2"],
+  "recommended_verses": ["시91:11"], 
   "confidence": 0.85,
   "intent_summary": "...",
   "sentiments": ["...", "..."],
@@ -79,10 +94,10 @@ ${SITUATION_VERSE_MAP_EXPANDED_V1.map(
             },
             {
               role: "user",
-              content: `다음 사용자 입력을 상황 유형(id)으로 분류하고, 요약·감정·상황·키워드·신학적 주제도 함께 주세요:\n\n${input}`,
+              content: `다음 사용자 입력을 상황 유형(id)으로 분류하고, 요약·감정·상황·키워드·신학적 주제·추천말씀도 함께 주세요:\n\n${input}`,
             },
           ],
-          temperature: 0.4,
+          temperature: 0.3, // Slightly lower for more deterministic classification
           response_format: { type: "json_object" },
         }),
       });
@@ -158,7 +173,7 @@ ${SITUATION_VERSE_MAP_EXPANDED_V1.map(
         ? Math.max(0, Math.min(1, result.confidence))
         : 0.8;
 
-    return NextResponse.json({
+    const responsePayload = {
       intent_summary: result.intent_summary || "상황 분석 완료",
       sentiments: Array.isArray(result.sentiments) ? result.sentiments : [],
       situations: Array.isArray(result.situations) ? result.situations : [],
@@ -168,9 +183,31 @@ ${SITUATION_VERSE_MAP_EXPANDED_V1.map(
       theological_themes: Array.isArray(result.theological_themes)
         ? result.theological_themes
         : [],
+      recommended_verses: Array.isArray(result.recommended_verses)
+        ? result.recommended_verses
+        : [],
       situation_class_ids,
       confidence,
-    });
+    };
+
+    // Log to Supabase (fire and forget, don't block response)
+    (async () => {
+      try {
+        const { error } = await supabase.from("search_logs").insert({
+          input_text: input,
+          analysis_json: result,
+          situation_ids: situation_class_ids,
+          recommended_verses: result.recommended_verses,
+        });
+        if (error) {
+          console.error("Supabase log error:", error);
+        }
+      } catch (err) {
+        console.error("Supabase log exception:", err);
+      }
+    })();
+
+    return NextResponse.json(responsePayload);
   } catch (e: unknown) {
     console.error("Analyze error:", e);
     return NextResponse.json(

@@ -134,8 +134,8 @@ export default function Home() {
       setGemsVerses(searchData.gems_verses ?? []);
       setContextVerses(searchData.context_verses ?? []);
 
-      // Navigate to Result Page
-      router.push('/result');
+      // Navigate to Result Page with query param for persistence
+      router.push(`/result?q=${encodeURIComponent(input)}`);
 
     } catch (e: unknown) {
       clearInterval(msgInterval);

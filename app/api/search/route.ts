@@ -122,9 +122,12 @@ export async function POST(req: Request) {
   const situation_class_ids: string[] = Array.isArray(body.situation_class_ids)
     ? body.situation_class_ids
     : [];
+  const recommended_verses: string[] = Array.isArray(body.recommended_verses)
+    ? body.recommended_verses
+    : [];
   const gems_seed: string = String(body.gems_seed ?? "").trim();
 
-  if (situation_class_ids.length === 0) {
+  if (situation_class_ids.length === 0 && recommended_verses.length === 0) {
     return NextResponse.json({
       verses: [],
       core_verses: [],
@@ -138,8 +141,39 @@ export async function POST(req: Request) {
 
   // Strictly Top 3 by weight
   const TOP_SIZE = 3;
-  const coreSlice = mergedCore.slice(0, TOP_SIZE);
+  let coreSlice = mergedCore.slice(0, TOP_SIZE);
   const gemsSlice = mergedGems.slice(0, TOP_SIZE);
+
+  // Inject recommended verses at the TOP of coreSlice
+  // We need to create "fake" EnrichedCandidate objects for them
+  // If they are already in coreSlice, move them to top?
+  // Strategy: 
+  // 1. Filter out recommended from coreSlice to avoid dupes in the top section
+  // 2. Add recommended to the front
+  // 3. Trim to a reasonable size (maybe 3 + recommended length, or just keep expanding)
+
+  if (recommended_verses.length > 0) {
+    // Basic meta for recommended verses (since we don't have situation map data for arbitrary verses)
+    const recommendedCandidates: { ref_key: string; weight: number; meta: EnrichedCandidate }[] = recommended_verses.map(ref => ({
+      ref_key: ref,
+      weight: 100, // High weight
+      meta: {
+        ref_key: ref,
+        weight: 100,
+        situationId: "RECOMMENDED",
+        display_name_ko: "맞춤 말씀",
+        description_ko: "상황에 딱 맞는 추천 말씀입니다.",
+        themes: ["인도", "응답"],
+        tags: ["추천"]
+      }
+    }));
+
+    // Remove duplicates from coreSlice that are also in recommended
+    coreSlice = coreSlice.filter(c => !recommended_verses.includes(c.ref_key));
+
+    // Prepend recommended
+    coreSlice = [...recommendedCandidates, ...coreSlice];
+  }
 
   // Optional: Context verses can still be returned if needed, 
   // but we'll focus on the Top 3s for the current requirement.

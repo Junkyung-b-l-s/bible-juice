@@ -44,34 +44,38 @@ export async function POST(req: Request) {
           messages: [
             {
               role: "system",
-              content: `당신은 사용자 입력을 '상황 유형'으로만 분류합니다. 요절을 생성하거나 찾지 말고, 오직 분류만 하세요.
+              content: `당신은 사용자 자연어 입력을 분석하고 깊은 영적·심리적 상태로 분류하는 성경 상담 도우미입니다.
+              
+단순한 키워드 매칭을 넘어, 다음의 미묘한 정서를 구분해 주세요:
+- 단순히 바쁜 상태인가(업무량), 아니면 인간관계에서 오는 억울함이나 미움(상사/동료 피로감)인가?
+- 후자라면 반드시 '분노·원망·용서(ANGER_BITTERNESS_FORGIVENESS)'나 '억울함·불공정(INJUSTICE_UNFAIRNESS)' ID를 우선적으로 고려하세요.
+- 사용자가 "자기도 못하면서"와 같이 상대에 대한 판단이나 짜증을 표현한다면 이는 관계적 상처와 용서의 주제가 핵심입니다.
 
-아래는 사용 가능한 상황 유형(id) 목록입니다. 사용자 자연어에 가장 잘 맞는 id를 1개 또는 2개만 골라주세요.
+아래는 사용 가능한 상황 유형(id) 목록입니다. 가장 어울리는 id를 1~2개 선택하세요:
 
 ${SITUATION_VERSE_MAP_EXPANDED_V1.map(
-  (s) =>
-    `- ${s.id}: ${s.display_name_ko} (힌트: ${s.signals.slice(0, 5).join(", ")})`
-).join("\n")}
+                (s) =>
+                  `- ${s.id}: ${s.display_name_ko} (${s.description_ko})`
+              ).join("\n")}
 
-추가로 다음도 JSON으로 제공하세요:
-- intent_summary: 한 문장 요약
-- sentiments: 감정 배열
-- situations: 상황 키워드 배열
-- suggested_keywords: UI 표시용 키워드 5~8개
-- theological_themes: 신학적 주제 3~5개
-- confidence: 분류 확신도 0.0~1.0 (숫자 하나)
+또한 다음 정보도 JSON으로 추출하세요:
+- intent_summary: 성도님의 마음을 공감하며 한 문장으로 요약 (목회적 따뜻함 유지)
+- sentiments: 핵심 감정 2~3개
+- situations: 구체적인 상황 키워드
+- suggested_keywords: UI 표시용 (예: #용서 #인내 #억울함)
+- theological_themes: 관련된 영적/신학적 주제
+- confidence: 확신도 (0~1)
 
-응답은 반드시 다음 JSON 형식만 사용하세요:
+응답 형식 (JSON):
 {
   "situation_class_ids": ["ID1", "ID2"],
   "confidence": 0.85,
-  "intent_summary": "한 문장 요약",
-  "sentiments": ["감정1", "감정2"],
-  "situations": ["상황1", "상황2"],
-  "suggested_keywords": ["키워드1", "키워드2"],
-  "theological_themes": ["주제1", "주제2"]
-}
-situation_class_ids에는 위 목록에 있는 id만 1~2개 넣으세요.`,
+  "intent_summary": "...",
+  "sentiments": ["...", "..."],
+  "situations": ["...", "..."],
+  "suggested_keywords": ["...", "..."],
+  "theological_themes": ["...", "..."]
+}`,
             },
             {
               role: "user",
@@ -167,10 +171,10 @@ situation_class_ids에는 위 목록에 있는 id만 1~2개 넣으세요.`,
       situation_class_ids,
       confidence,
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("Analyze error:", e);
     return NextResponse.json(
-      { error: e?.message ?? "분석 중 오류가 발생했습니다." },
+      { error: e instanceof Error ? e.message : "분석 중 오류가 발생했습니다." },
       { status: 500 }
     );
   }

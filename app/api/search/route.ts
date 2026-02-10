@@ -136,23 +136,14 @@ export async function POST(req: Request) {
   const mergedCore = mergeCorePool(situation_class_ids);
   const mergedGems = mergeGemsPool(situation_class_ids);
 
-  const coreCandidates = mergedCore.slice(0, CORE_MAX);
-  const coreCount = Math.min(
-    CORE_MAX,
-    Math.max(CORE_MIN, coreCandidates.length)
-  );
-  const coreSlice = coreCandidates.slice(0, coreCount);
+  // Strictly Top 3 by weight
+  const TOP_SIZE = 3;
+  const coreSlice = mergedCore.slice(0, TOP_SIZE);
+  const gemsSlice = mergedGems.slice(0, TOP_SIZE);
 
-  const contextCandidates = mergedCore.slice(CORE_MAX, CORE_MAX + CONTEXT_SIZE);
-
-  const gemsSlice = (() => {
-    if (mergedGems.length <= GEMS_SIZE) return mergedGems.slice(0, GEMS_SIZE);
-    if (gems_seed) {
-      const shuffled = seededShuffle(mergedGems, gems_seed);
-      return shuffled.slice(0, GEMS_SIZE);
-    }
-    return mergedGems.slice(0, GEMS_SIZE);
-  })();
+  // Optional: Context verses can still be returned if needed, 
+  // but we'll focus on the Top 3s for the current requirement.
+  const contextCandidates = mergedCore.slice(TOP_SIZE, TOP_SIZE + CONTEXT_SIZE);
 
   const allRefKeys = [
     ...coreSlice.map((c) => c.ref_key),
@@ -191,7 +182,6 @@ export async function POST(req: Request) {
       context: string;
       intent: string;
       reframing: string;
-      questions?: string[];
       tags?: string[];
       pitfalls?: string[];
     };
@@ -207,7 +197,6 @@ export async function POST(req: Request) {
         context: comm.context,
         intent: comm.intent,
         reframing: comm.reframing,
-        questions: comm.questions,
         tags: comm.tags,
         pitfalls: comm.pitfalls,
       },
@@ -226,19 +215,19 @@ export async function POST(req: Request) {
       });
     })
     .filter(Boolean) as {
-    id: number;
-    ref_key: string;
-    text: string;
-    reason_one_liner: string;
-    commentary?: {
-      context: string;
-      intent: string;
-      reframing: string;
-      questions?: string[];
-      tags?: string[];
-      pitfalls?: string[];
-    };
-  }[];
+      id: number;
+      ref_key: string;
+      text: string;
+      reason_one_liner: string;
+      commentary?: {
+        context: string;
+        intent: string;
+        reframing: string;
+        questions?: string[];
+        tags?: string[];
+        pitfalls?: string[];
+      };
+    }[];
 
   const gems_verses = gemsSlice
     .map((c) => {
@@ -252,19 +241,19 @@ export async function POST(req: Request) {
       });
     })
     .filter(Boolean) as {
-    id: number;
-    ref_key: string;
-    text: string;
-    reason_one_liner: string;
-    commentary?: {
-      context: string;
-      intent: string;
-      reframing: string;
-      questions?: string[];
-      tags?: string[];
-      pitfalls?: string[];
-    };
-  }[];
+      id: number;
+      ref_key: string;
+      text: string;
+      reason_one_liner: string;
+      commentary?: {
+        context: string;
+        intent: string;
+        reframing: string;
+        questions?: string[];
+        tags?: string[];
+        pitfalls?: string[];
+      };
+    }[];
 
   const context_verses = contextCandidates
     .map((c) => {
@@ -277,18 +266,18 @@ export async function POST(req: Request) {
       });
     })
     .filter(Boolean) as {
-    id: number;
-    ref_key: string;
-    text: string;
-    commentary?: {
-      context: string;
-      intent: string;
-      reframing: string;
-      questions?: string[];
-      tags?: string[];
-      pitfalls?: string[];
-    };
-  }[];
+      id: number;
+      ref_key: string;
+      text: string;
+      commentary?: {
+        context: string;
+        intent: string;
+        reframing: string;
+        questions?: string[];
+        tags?: string[];
+        pitfalls?: string[];
+      };
+    }[];
 
   const verses = [...core_verses, ...gems_verses, ...context_verses];
 

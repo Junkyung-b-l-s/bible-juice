@@ -407,7 +407,7 @@ export default function ResultPage() {
     return (
         <Suspense fallback={
             <main style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div className="serif" style={{ color: 'rgb(69, 96, 60)', fontSize: 24, animate: 'pulse 2s infinite' }}>기다리는 중...</div>
+                <div className="serif" style={{ color: 'rgb(69, 96, 60)', fontSize: 24, animation: 'pulse 2s infinite' }}>기다리는 중...</div>
             </main>
         }>
             <ResultContent />

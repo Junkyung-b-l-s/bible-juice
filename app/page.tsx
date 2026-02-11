@@ -70,13 +70,20 @@ export default function Home() {
     "자녀 문제로 마음이 무거우신가요?",
     "직장에서 자존감이 깎이는 기분이 드나요?",
     "사람 관계 때문에 잠을 못 이루고 계신가요?",
-    "미래가 불안해 하나님께 묻고 싶으신가요?"
+    "미래가 불안해 하나님께 묻고 싶으신가요?",
+    "누군가를 용서하기가 너무 힘드신가요?",
+    "경제적인 문제로 밤잠을 설치고 계신가요?",
+    "건강 문제로 주님의 위로가 필요하신가요?",
+    "나만 홀로 남겨진 것 같은 외로움을 느끼나요?",
+    "나의 앞길이 캄캄해 한 걸음도 떼기 어렵나요?",
+    "주님의 사랑이 의심될 만큼 고통스러우신가요?",
+    "내 안에 분노가 가득해 통제가 안 되나요?"
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
-    }, 4000);
+    }, 2800);
     return () => clearInterval(interval);
   }, [placeholders.length]);
 
@@ -227,7 +234,6 @@ export default function Home() {
                 outline: "none",
                 fontSize: 18,
                 lineHeight: 1.8,
-                display: 'block'
               }}
             />
           </div>
@@ -281,14 +287,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Floating Feedback Button */}
-      <a
-        href="mailto:jk.junkyung.kim@gmail.com"
-        className="floating-button"
-      >
-        💌 개발자에게 바란다
-      </a>
     </main>
   );
 }

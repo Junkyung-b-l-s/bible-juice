@@ -6,6 +6,7 @@ export type Verse = {
     id: number;
     ref_key: string;
     text: string;
+    text_en?: string;
     reason_one_liner?: string;
     commentary?: {
         context: string;

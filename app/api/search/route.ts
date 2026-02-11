@@ -195,22 +195,31 @@ export async function POST(req: Request) {
     });
   }
 
-  const { data: rows, error } = await supabase
+  const { data: rowsKrv, error: errorKrv } = await supabase
     .from("bible_krv")
     .select("id, ref_key, text")
     .in("ref_key", uniqueRefKeys);
 
-  if (error) {
-    return NextResponse.json({ error }, { status: 500 });
+  const { data: rowsNiv, error: errorNiv } = await supabase
+    .from("bible_niv")
+    .select("ref_key, text")
+    .in("ref_key", uniqueRefKeys);
+
+  if (errorKrv || errorNiv) {
+    return NextResponse.json({ error: errorKrv || errorNiv }, { status: 500 });
   }
 
   const textByRef = new Map(
-    (rows ?? []).map((r) => [r.ref_key, { id: r.id, text: r.text }])
+    (rowsKrv ?? []).map((r) => [r.ref_key, { id: r.id, text: r.text }])
+  );
+  const textEnByRef = new Map(
+    (rowsNiv ?? []).map((r) => [r.ref_key, r.text])
   );
 
   function attachCommentary<T extends { ref_key: string; text: string }>(
     item: T
   ): T & {
+    text_en?: string;
     reason_one_liner?: string;
     commentary?: {
       context: string;
@@ -220,13 +229,20 @@ export async function POST(req: Request) {
       pitfalls?: string[];
     };
   } {
-    const raw = item as T & { reason_one_liner?: string };
+    const raw = item as T & { reason_one_liner?: string; text_en?: string };
+    const englishText = textEnByRef.get(item.ref_key);
     const comm = VERSE_COMMENTARY_KRV[item.ref_key];
+
+    const baseResult = {
+      ...raw,
+      text_en: englishText,
+    };
+
     if (!comm) {
-      return raw as T & { reason_one_liner?: string; commentary?: undefined };
+      return baseResult as any;
     }
     return {
-      ...raw,
+      ...baseResult,
       commentary: {
         context: comm.context,
         intent: comm.intent,
@@ -234,7 +250,7 @@ export async function POST(req: Request) {
         tags: comm.tags,
         pitfalls: comm.pitfalls,
       },
-    };
+    } as any;
   }
 
   const core_verses = coreSlice

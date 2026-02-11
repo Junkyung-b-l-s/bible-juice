@@ -2,25 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import Header from "@/components/Header";
 
 export default function AboutPage() {
     return (
-        <main style={{ minHeight: '100vh', background: '#FDF8F1', color: '#2C3E50', paddingBottom: 100 }}>
-            {/* Fixed Logo / Wordmark + Navigation */}
-            <div style={{
-                position: 'fixed', top: 24, left: 32, zIndex: 100,
-                display: 'flex', alignItems: 'center', gap: 24
-            }}>
-                <Link href="/" style={{
-                    fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 900,
-                    color: '#A8B7A3', letterSpacing: '-0.02em', textDecoration: 'none'
-                }}>
-                    Bible Juice
-                </Link>
-                <span style={{ fontSize: 14, fontWeight: 700, color: '#2C3E50' }}>
-                    About Bible Juice
-                </span>
-            </div>
+        <main style={{ minHeight: '100vh', background: 'var(--bg-primary)', color: '#2C3E50', paddingBottom: 100 }}>
+            <Header />
 
             <div style={{ maxWidth: 800, margin: '0 auto', paddingTop: 120, paddingLeft: 24, paddingRight: 24 }}>
                 <header style={{ marginBottom: 64, textAlign: 'center' }}>
@@ -75,7 +62,7 @@ export default function AboutPage() {
                             <li>
                                 <span style={{ display: 'block', fontSize: 12, color: '#8D7D6A', fontWeight: 700, marginBottom: 4 }}>연락처</span>
                                 <a href="mailto:jk.junkyung.kim@gmail.com" style={{ fontSize: 16, fontWeight: 600, color: '#2C3E50', textDecoration: 'none', borderBottom: '1px solid #D1CEC7' }}>
-                                    jk.junkyung.kim@gmail.com
+                                    문의하기
                                 </a>
                             </li>
                         </ul>
@@ -92,14 +79,6 @@ export default function AboutPage() {
                     </Link>
                 </footer>
             </div>
-
-            {/* Floating Feedback Button */}
-            <a
-                href="mailto:jk.junkyung.kim@gmail.com"
-                className="floating-button"
-            >
-                💌 개발자에게 바란다
-            </a>
         </main>
     );
 }

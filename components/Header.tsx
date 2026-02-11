@@ -45,11 +45,12 @@ export default function Header() {
             {/* Fixed Logo / Wordmark (Left) */}
             <div className="header-logo" style={{
                 position: 'fixed', top: 24, left: 32, zIndex: 100,
-                display: 'flex', alignItems: 'center', gap: 24
+                display: 'flex', alignItems: 'center', height: 32
             }}>
                 <Link href="/" onClick={handleLogoClick} style={{
                     fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 900,
-                    color: 'rgb(69, 96, 60)', letterSpacing: '-0.02em', textDecoration: 'none'
+                    color: 'rgb(69, 96, 60)', letterSpacing: '-0.02em', textDecoration: 'none',
+                    lineHeight: 1
                 }}>
                     Bible Juice
                 </Link>
@@ -58,11 +59,11 @@ export default function Header() {
             {/* About Link (Right) */}
             <div className="header-about" style={{
                 position: 'fixed', top: 24, right: 32, zIndex: 100,
-                display: 'flex', alignItems: 'center', gap: 24
+                display: 'flex', alignItems: 'center', height: 32
             }}>
                 <Link href="/about" style={{
                     fontSize: 14, fontWeight: 700, color: '#8D7D6A', textDecoration: 'none',
-                    opacity: 0.8, transition: 'opacity 0.3s'
+                    opacity: 0.8, transition: 'opacity 0.3s', lineHeight: 1
                 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
                     onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}>
                     About Bible Juice

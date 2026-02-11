@@ -21,7 +21,8 @@ function HeroVerse({ verse }: { verse: Verse }) {
             boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
             backgroundImage: 'url("/hero.png")',
             backgroundSize: 'cover',
-            backgroundPosition: 'center 30%'
+            backgroundPosition: 'center 30%',
+            overflow: 'hidden'
         }}>
             <div style={{
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
@@ -33,7 +34,8 @@ function HeroVerse({ verse }: { verse: Verse }) {
                 position: 'absolute', bottom: '-10%', right: '-5%', width: '80%', height: '80%',
                 background: 'radial-gradient(circle at center, rgba(69, 96, 60, 0.15) 0%, rgba(69, 96, 60, 0) 70%)',
                 filter: 'blur(80px)',
-                zIndex: 0
+                zIndex: 0,
+                pointerEvents: 'none'
             }} />
 
             <div className="fade-in" style={{
@@ -47,13 +49,26 @@ function HeroVerse({ verse }: { verse: Verse }) {
                 <h2 className="serif-h2" style={{
                     fontSize: 'clamp(22px, 5vw, 34px)',
                     lineHeight: 1.5,
-                    marginBottom: 32,
+                    marginBottom: 16,
                     fontWeight: 500,
                     textShadow: '0 2px 10px rgba(0,0,0,0.3)',
                     wordBreak: 'keep-all'
                 }}>
                     &quot;{verse.text}&quot;
                 </h2>
+                {verse.text_en && (
+                    <div className="serif" style={{
+                        fontSize: 'clamp(14px, 3.5vw, 18px)',
+                        lineHeight: 1.5,
+                        marginBottom: 32,
+                        opacity: 0.8,
+                        fontWeight: 400,
+                        maxWidth: '90%',
+                        margin: '0 auto 32px auto'
+                    }}>
+                        &quot;{verse.text_en}&quot;
+                    </div>
+                )}
                 <div className="serif" style={{ fontSize: 16, fontStyle: 'italic', marginBottom: 48, opacity: 0.95 }}>
                     — {verse.ref_key}
                 </div>
@@ -138,11 +153,23 @@ function VerseCard({
             <div className="serif" style={{
                 color: "#2C3E50", lineHeight: 1.6,
                 fontSize: 'clamp(17px, 4.5vw, 19px)',
-                marginBottom: 24, fontWeight: 600, letterSpacing: '-0.01em',
+                marginBottom: v.text_en ? 12 : 24, fontWeight: 800, letterSpacing: '-0.01em',
                 wordBreak: 'keep-all'
             }}>
                 &quot;{v.text}&quot;
             </div>
+
+            {v.text_en && (
+                <div className="serif" style={{
+                    color: "#5D6D7E", lineHeight: 1.5,
+                    fontSize: 'clamp(13px, 3.5vw, 14px)',
+                    marginBottom: 24, fontWeight: 500,
+                    wordBreak: 'keep-all',
+                    opacity: 0.9
+                }}>
+                    &quot;{v.text_en}&quot;
+                </div>
+            )}
 
             {c && (
                 <div style={{
@@ -320,23 +347,7 @@ function ResultContent() {
                         잠시 눈을 감고, 주님의 세미한 음성에 귀를 기울여 보시기 바랍니다.
                     </p>
 
-                    {/* 3. CORE TOP 3 SECTION */}
-                    <div style={{ marginBottom: 40, textAlign: 'center' }}>
-                        <div style={{ fontSize: 13, fontWeight: 900, color: 'rgb(69, 96, 60)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 16 }}>
-                            핵심 묵상
-                        </div>
-                        <h4 className="serif" style={{ fontSize: 24, color: '#2C3E50', fontWeight: 700 }}>
-                            상황에 딱 맞는 말씀 Top 3
-                        </h4>
-                    </div>
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32, marginBottom: 100 }}>
-                        {coreVerses.map((v) => (
-                            <VerseCard key={v.id} verse={v} variant="core" inputContext={input} />
-                        ))}
-                    </div>
-
-                    {/* 4. GEMS TOP 3 SECTION */}
+                    {/* 3. GEMS TOP 3 SECTION - Promoted above Core Top 3 */}
                     <div style={{ marginBottom: 40, textAlign: 'center' }}>
                         <div style={{ fontSize: 13, fontWeight: 900, color: '#D4AF37', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 16 }}>
                             숨겨진 은총
@@ -346,9 +357,25 @@ function ResultContent() {
                         </h4>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32, marginBottom: 100 }}>
                         {gemsVerses.map((v) => (
                             <VerseCard key={v.id} verse={v} variant="gems" inputContext={input} />
+                        ))}
+                    </div>
+
+                    {/* 4. CORE TOP 3 SECTION */}
+                    <div style={{ marginBottom: 40, textAlign: 'center' }}>
+                        <div style={{ fontSize: 13, fontWeight: 900, color: 'rgb(69, 96, 60)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 16 }}>
+                            핵심 묵상
+                        </div>
+                        <h4 className="serif" style={{ fontSize: 24, color: '#2C3E50', fontWeight: 700 }}>
+                            상황에 딱 맞는 말씀 Top 3
+                        </h4>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 32 }}>
+                        {coreVerses.map((v) => (
+                            <VerseCard key={v.id} verse={v} variant="core" inputContext={input} />
                         ))}
                     </div>
 
@@ -395,13 +422,6 @@ function ResultContent() {
                 confirmText="돌아가기"
                 cancelText="아니요"
             />
-
-            <a
-                href="mailto:jk.junkyung.kim@gmail.com"
-                className="floating-button"
-            >
-                💌 개발자에게 바란다
-            </a>
         </main>
     );
 }

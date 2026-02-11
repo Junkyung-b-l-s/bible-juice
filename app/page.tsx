@@ -176,12 +176,12 @@ export default function Home() {
       <div style={{ padding: '80px 24px', maxWidth: 860, margin: "0 auto" }}>
         {/* Landing Header - Pastoral Tone */}
         <header style={{ textAlign: 'center', marginBottom: 64, marginTop: 40 }}>
-          <h1 className="serif-h1 fade-in" style={{ fontSize: 62, fontWeight: 900, color: '#2C3E50', marginBottom: 24, letterSpacing: '-0.03em' }}>
-            Bible Juice
+          <h1 className="serif-h1 fade-in" style={{ fontSize: 48, fontWeight: 900, color: '#2C3E50', marginBottom: 24, letterSpacing: '-0.03em', wordBreak: 'keep-all' }}>
+            지친 당신의 영혼에,<br />은혜 한 잔.
           </h1>
-          <p className="fade-in body-text" style={{ fontSize: 20, color: '#8D7D6A', maxWidth: 640, margin: '0 auto', lineHeight: 1.8, fontWeight: 500 }}>
-            두려우신가요. 화나시나요. 무기력하신가요. <br />
-            지금 상황을 털어놓고 하나님이 어떤 말씀을 하고 싶은지 들어보세요.
+          <p className="fade-in body-text" style={{ fontSize: 20, color: '#8D7D6A', maxWidth: 640, margin: '0 auto', lineHeight: 1.8, fontWeight: 500, wordBreak: 'keep-all' }}>
+            복잡한 마음은 털어놓으세요. <br />
+            당신의 상황에 딱 맞는 말씀을 신선하게 짜내어 드립니다.
           </p>
         </header>
 

@@ -40,6 +40,10 @@ body {
   overflow-x: hidden;
   /* Prevent horizontal scroll */
   width: 100%;
+
+  /* Prevent awkward line breaks in Korean */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 h1,

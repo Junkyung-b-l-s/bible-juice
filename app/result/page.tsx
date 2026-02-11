@@ -264,7 +264,7 @@ function ResultContent() {
 
             <div ref={resultsRef} className="fade-in" style={{ paddingBottom: 120 }}>
                 {/* 1. HERO ARTWORK */}
-                {coreVerses.length > 0 && <HeroVerse verse={coreVerses[0]} />}
+                {gemsVerses.length > 0 && <HeroVerse verse={gemsVerses[0]} />}
 
                 <div style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px' }}>
 

@@ -3,6 +3,7 @@ import { VERSE_COMMENTARY_KRV } from "@/data/verseCommentary.krv";
 import Link from "next/link";
 import { BookOpen, MessageCircle, Youtube, Search, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
+import { formatBibleReference } from "@/utils/bibleRef";
 import { GoBackButton } from "@/components/GoBackButton";
 
 // Server Component로 변경하여 보안 키(SERVICE_ROLE_KEY)를 서버에서만 안전하게 사용합니다.
@@ -178,7 +179,7 @@ export default async function VersePage({
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
               <a
-                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(data.ref_key + " 설교")}`}
+                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(formatBibleReference(data.ref_key) + " 설교")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -193,13 +194,13 @@ export default async function VersePage({
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <Search size={18} color="rgb(69, 96, 60)" />
-                  <span style={{ fontWeight: 600 }}>{data.ref_key} 한국어 설교 검색</span>
+                  <span style={{ fontWeight: 600 }}>{formatBibleReference(data.ref_key)} 설교 검색</span>
                 </div>
                 <ExternalLink size={16} opacity={0.5} />
               </a>
 
               <a
-                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(data.ref_key + " sermon")}`}
+                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(formatBibleReference(data.ref_key) + " English sermon")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -214,7 +215,7 @@ export default async function VersePage({
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <Search size={18} color="#2C3E50" />
-                  <span style={{ fontWeight: 600 }}>{data.ref_key} English Sermons</span>
+                  <span style={{ fontWeight: 600 }}>{formatBibleReference(data.ref_key)} English Sermons</span>
                 </div>
                 <ExternalLink size={16} opacity={0.5} />
               </a>

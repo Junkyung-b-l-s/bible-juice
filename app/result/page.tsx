@@ -237,15 +237,15 @@ function ResultContent() {
     }, [analysis]);
 
     useEffect(() => {
-        // Fetch interpretation for the first core verse
-        if (analysis && coreVerses.length > 0 && input && !interpretation) {
+        // Fetch interpretation for the first hidden gem (Hero Verse)
+        if (analysis && gemsVerses.length > 0 && input && !interpretation) {
             fetch("/api/interpret", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     input,
-                    verse_text: coreVerses[0].text,
-                    ref_key: coreVerses[0].ref_key
+                    verse_text: gemsVerses[0].text,
+                    ref_key: gemsVerses[0].ref_key
                 })
             })
                 .then(res => res.json())
@@ -254,7 +254,7 @@ function ResultContent() {
                 })
                 .catch(err => console.error(err));
         }
-    }, [analysis, coreVerses, input, interpretation]);
+    }, [analysis, gemsVerses, input, interpretation]);
 
     if (!analysis) return null;
 

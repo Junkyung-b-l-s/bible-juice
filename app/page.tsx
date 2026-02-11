@@ -63,6 +63,22 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const [visitors, setVisitors] = useState<{ todayUnique: number; totalUnique: number } | null>(null);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  const placeholders = [
+    "무슨 생각이 나를 사로잡고 있나요..?",
+    "자녀 문제로 마음이 무거우신가요?",
+    "직장에서 자존감이 깎이는 기분이 드나요?",
+    "사람 관계 때문에 잠을 못 이루고 계신가요?",
+    "미래가 불안해 하나님께 묻고 싶으신가요?"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [placeholders.length]);
 
   useEffect(() => {
     const fetchVisitors = async () => {
@@ -152,11 +168,11 @@ export default function Home() {
 
       <div style={{ padding: '80px 24px', maxWidth: 860, margin: "0 auto" }}>
         {/* Landing Header - Pastoral Tone */}
-        <header style={{ textAlign: 'center', marginBottom: 72, marginTop: 40 }}>
-          <h1 className="serif fade-in" style={{ fontSize: 56, fontWeight: 900, color: '#2C3E50', marginBottom: 24 }}>
+        <header style={{ textAlign: 'center', marginBottom: 64, marginTop: 40 }}>
+          <h1 className="serif-h1 fade-in" style={{ fontSize: 62, fontWeight: 900, color: '#2C3E50', marginBottom: 24, letterSpacing: '-0.03em' }}>
             Bible Juice
           </h1>
-          <p className="fade-in" style={{ fontSize: 20, color: '#8D7D6A', maxWidth: 640, margin: '0 auto', lineHeight: 1.8, fontWeight: 500 }}>
+          <p className="fade-in body-text" style={{ fontSize: 20, color: '#8D7D6A', maxWidth: 640, margin: '0 auto', lineHeight: 1.8, fontWeight: 500 }}>
             두려우신가요. 화나시나요. 무기력하신가요. <br />
             지금 상황을 털어놓고 하나님이 어떤 말씀을 하고 싶은지 들어보세요.
           </p>
@@ -164,47 +180,73 @@ export default function Home() {
 
         {/* Input Section */}
         <section className="glass fade-in mobile-padding" style={{
-          padding: '48px', borderRadius: 40, marginBottom: 80,
-          boxShadow: '0 20px 50px rgba(69, 96, 60, 0.12)'
+          padding: '56px 48px', borderRadius: 40, marginBottom: 80,
+          boxShadow: '0 30px 60px rgba(69, 96, 60, 0.12)'
         }}>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                startReflection();
-              }
-            }}
-            placeholder={"무슨 생각이 나를 사로잡고 있나요..?\n(예. 상사가 자꾸 나를 긁어요. 자기도 잘 하지도 못하면서. 너무 미워요)"}
-            rows={6}
-            style={{
-              width: "100%",
-              padding: '28px',
-              borderRadius: 24,
-              border: "1px solid #E5E5E5",
-              background: 'white',
-              outline: "none",
-              fontSize: 18,
-              lineHeight: 1.8,
-              marginBottom: 40
-            }}
-          />
+          <div style={{ position: 'relative', marginBottom: 40 }}>
+            <AnimatePresence mode="wait">
+              {!input && (
+                <motion.div
+                  key={placeholderIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 0.4, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                  style={{
+                    position: 'absolute',
+                    top: 28,
+                    left: 28,
+                    right: 28,
+                    pointerEvents: 'none',
+                    fontSize: 18,
+                    lineHeight: 1.8,
+                    color: '#2C3E50',
+                    whiteSpace: 'pre-wrap'
+                  }}
+                >
+                  {placeholders[placeholderIndex]}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  startReflection();
+                }
+              }}
+              rows={6}
+              style={{
+                width: "100%",
+                padding: '28px',
+                borderRadius: 24,
+                border: "1px solid #E5E5E5",
+                background: 'white',
+                outline: "none",
+                fontSize: 18,
+                lineHeight: 1.8,
+                display: 'block'
+              }}
+            />
+          </div>
           <div style={{ textAlign: 'center' }}>
             <button
               onClick={startReflection}
               disabled={!canStart || loading}
               style={{
-                padding: "20px 64px",
+                padding: "clamp(16px, 4vw, 20px) clamp(32px, 8vw, 64px)",
                 borderRadius: 99,
                 border: "none",
                 background: canStart ? "#2C3E50" : "#D1CEC7",
                 color: "white",
                 cursor: canStart ? "pointer" : "not-allowed",
                 fontWeight: 600,
-                fontSize: 19,
+                fontSize: 'clamp(16px, 4vw, 19px)',
                 boxShadow: canStart ? '0 12px 28px rgba(44, 62, 80, 0.25)' : 'none',
                 display: 'inline-flex', alignItems: 'center', gap: 14,
+                whiteSpace: 'nowrap',
                 transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
               }}
               onMouseEnter={(e) => { if (canStart) e.currentTarget.style.transform = 'translateY(-3px)'; }}

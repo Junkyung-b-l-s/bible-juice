@@ -15,7 +15,7 @@ function HeroVerse({ verse }: { verse: Verse }) {
     return (
         <section style={{
             position: 'relative', width: '100%',
-            minHeight: '60vh',
+            minHeight: '40vh',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: 48,
             boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
@@ -39,12 +39,12 @@ function HeroVerse({ verse }: { verse: Verse }) {
             <div className="fade-in" style={{
                 position: 'relative', zIndex: 1, color: 'white', textAlign: 'center',
                 padding: '0 24px', maxWidth: 840, width: '100%',
-                paddingTop: 60, paddingBottom: 60
+                paddingTop: 100, paddingBottom: 60
             }}>
                 <div style={{ fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 24, opacity: 0.9, fontWeight: 700 }}>
                     Heavenly Peace
                 </div>
-                <h2 className="serif" style={{
+                <h2 className="serif-h2" style={{
                     fontSize: 'clamp(22px, 5vw, 34px)',
                     lineHeight: 1.5,
                     marginBottom: 32,
@@ -137,7 +137,7 @@ function VerseCard({
 
             <div className="serif" style={{
                 color: "#2C3E50", lineHeight: 1.6,
-                fontSize: 'clamp(15px, 4vw, 19px)',
+                fontSize: 'clamp(17px, 4.5vw, 19px)',
                 marginBottom: 24, fontWeight: 600, letterSpacing: '-0.01em',
                 wordBreak: 'keep-all'
             }}>
@@ -244,18 +244,19 @@ function ResultContent() {
                     {/* 2. ANALYSIS SUMMARY (Pastoral Heart) */}
                     <div style={{ textAlign: 'center', marginBottom: 80, marginTop: 40 }}>
                         <div style={{ fontSize: 13, letterSpacing: '0.25em', color: 'rgb(69, 96, 60)', fontWeight: 900, marginBottom: 20, textTransform: 'uppercase' }}>
-                            Pastor&apos;s Heart
+                            Lord&apos;s Heart
                         </div>
-                        <h3 className="serif" style={{
+                        <h3 className="serif-h2" style={{
                             fontSize: 'clamp(24px, 4vw, 32px)',
                             color: '#2C3E50',
                             marginBottom: 24,
                             fontWeight: 700,
-                            lineHeight: 1.4
+                            lineHeight: 1.4,
+                            wordBreak: 'keep-all'
                         }}>
                             {analysis.intent_summary.includes('원망') || analysis.intent_summary.includes('불평')
                                 ? "무거운 짐을 주님 앞에 솔직히 내놓으셨군요"
-                                : "주님께서 성도님의 마음을 깊이 아십니다"}
+                                : <>우리 주님께서 <br />당신의 마음을 깊게 아십니다</>}
                         </h3>
 
                         <div className="glass" style={{
@@ -265,7 +266,7 @@ function ResultContent() {
                             minHeight: 280, // Reserve space to prevent layout shift
                             display: 'flex', flexDirection: 'column'
                         }}>
-                            <p style={{ color: '#2C3E50', fontSize: 18, lineHeight: 1.8, marginBottom: 20 }}>
+                            <p className="body-text" style={{ color: '#2C3E50', fontSize: 18, lineHeight: 1.8, marginBottom: 20 }}>
                                 <span style={{ display: 'block', fontSize: 14, color: '#8D7D6A', fontWeight: 700, marginBottom: 8, textTransform: 'uppercase' }}>
                                     성도님의 상황
                                 </span>
@@ -291,9 +292,10 @@ function ResultContent() {
                                         fontWeight: 500,
                                         background: "rgba(69, 96, 60, 0.03)",
                                         padding: "20px",
-                                        borderRadius: "16px"
+                                        borderRadius: "16px",
+                                        wordBreak: 'keep-all'
                                     }}>
-                                        <span style={{ fontSize: 20, marginRight: 8, display: "block", marginBottom: 8 }}>🌿 목회자의 처방</span>
+                                        <span style={{ fontSize: 20, marginRight: 8, display: "block", marginBottom: 8 }}>🌿 바이블 쥬스의 한마디</span>
                                         {interpretation}
                                     </div>
                                 ) : (
@@ -313,7 +315,7 @@ function ResultContent() {
                         </div>
                     </div>
 
-                    <p style={{ color: '#8D7D6A', fontSize: 18, maxWidth: 680, margin: '0 auto', lineHeight: 1.9, textAlign: 'center', marginBottom: 80 }}>
+                    <p className="body-text" style={{ color: '#8D7D6A', fontSize: 18, maxWidth: 680, margin: '0 auto', lineHeight: 1.9, textAlign: 'center', marginBottom: 80, wordBreak: 'keep-all' }}>
                         마음이 지친 성도님께 우리 하나님이 전하시는 사랑의 메시지입니다. <br />
                         잠시 눈을 감고, 주님의 세미한 음성에 귀를 기울여 보시기 바랍니다.
                     </p>
@@ -324,7 +326,7 @@ function ResultContent() {
                             핵심 묵상
                         </div>
                         <h4 className="serif" style={{ fontSize: 24, color: '#2C3E50', fontWeight: 700 }}>
-                            성도님의 상황에 가장 맞는 말씀 Top 3
+                            상황에 딱 맞는 말씀 Top 3
                         </h4>
                     </div>
 

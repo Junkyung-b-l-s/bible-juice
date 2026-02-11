@@ -49,25 +49,25 @@ export default async function VersePage({
         <GoBackButton />
       </header>
 
-      <section className="fade-in" style={{ marginBottom: 64 }}>
+      <section className="fade-in" style={{ marginBottom: 48 }}>
         {userContext && (
-          <div style={{ marginBottom: 24, textAlign: 'center' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#8D7D6A', textTransform: 'uppercase', marginBottom: 8 }}>
+          <div style={{ marginBottom: 32, textAlign: 'center' }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#8D7D6A', textTransform: 'uppercase', marginBottom: 12 }}>
               나의 상황
             </div>
-            <div className="serif" style={{ fontSize: 'clamp(18px, 4vw, 20px)', color: '#5D6D7E', fontStyle: 'italic', wordBreak: 'keep-all' }}>
+            <div className="serif" style={{ fontSize: 'clamp(18px, 4.5vw, 20px)', color: '#5D6D7E', fontStyle: 'italic', wordBreak: 'keep-all', lineHeight: 1.6 }}>
               &quot;{userContext}&quot;
             </div>
           </div>
         )}
-        <h1 className="serif" style={{ fontSize: 'clamp(24px, 5vw, 28px)', fontWeight: 700, color: 'rgb(69, 96, 60)', marginBottom: 28 }}>
+        <h1 className="serif-h1" style={{ fontSize: 'clamp(24px, 5vw, 28px)', fontWeight: 700, color: 'rgb(69, 96, 60)', marginBottom: 28 }}>
           {data.ref_key}
         </h1>
         <p className="serif" style={{
           fontSize: 'clamp(20px, 4.5vw, 26px)', lineHeight: 1.6, color: "#2C3E50", fontWeight: 500,
-          background: 'rgba(255, 255, 255, 0.6)', padding: 'clamp(24px, 5vw, 40px)', borderRadius: 32,
+          background: 'rgba(255, 255, 255, 0.6)', padding: 'clamp(32px, 6vw, 48px)', borderRadius: 32,
           border: '1px solid rgba(69, 96, 60, 0.15)',
-          boxShadow: '0 10px 30px rgba(69, 96, 60, 0.05)',
+          boxShadow: '0 10px 40px rgba(69, 96, 60, 0.05)',
           wordBreak: 'keep-all'
         }}>
           &quot;{data.text}&quot;
@@ -77,25 +77,25 @@ export default async function VersePage({
       {commentary && (
         <div className="fade-in" style={{ display: 'grid', gap: 48 }}>
           {/* Intent - 목사님의 따뜻한 설명 */}
-          <section className="glass" style={{ padding: 'clamp(24px, 5vw, 40px)', borderRadius: 28 }}>
-            <h2 style={{ fontSize: 13, fontWeight: 700, color: "#8D7D6A", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 20 }}>
+          <section className="glass" style={{ padding: 'clamp(32px, 6vw, 40px)', borderRadius: 28 }}>
+            <h2 className="section-label" style={{ fontSize: 'clamp(11px, 3vw, 12px)', fontWeight: 800, color: "#8D7D6A", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 24, wordBreak: 'keep-all' }}>
               하나님께서 우리에게 주시는 위로의 말씀
             </h2>
-            <p style={{ fontSize: 'clamp(15px, 4vw, 17px)', lineHeight: 1.7, color: "#2C3E50", wordBreak: 'keep-all' }}>
+            <p className="body-text" style={{ fontSize: '17px', lineHeight: 1.8, color: "#2C3E50", wordBreak: 'keep-all' }}>
               {commentary.intent}
             </p>
           </section>
 
           {/* Reframing - 삶으로의 적용 */}
           <section className="glass" style={{
-            padding: 'clamp(24px, 5vw, 40px)', borderRadius: 28,
+            padding: 'clamp(32px, 6vw, 40px)', borderRadius: 28,
             background: 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(69, 96, 60, 0.1) 100%)',
             borderLeft: '5px solid rgb(69, 96, 60)'
           }}>
-            <h2 style={{ fontSize: 13, fontWeight: 700, color: "#8D7D6A", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 20 }}>
+            <h2 className="section-label" style={{ fontSize: 'clamp(11px, 3vw, 12px)', fontWeight: 800, color: "#8D7D6A", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 24, wordBreak: 'keep-all' }}>
               성도의 삶을 세우는 은혜의 시선
             </h2>
-            <p style={{ fontSize: 'clamp(15px, 4vw, 17px)', lineHeight: 1.7, color: "#2C3E50", wordBreak: 'keep-all' }}>
+            <p className="body-text" style={{ fontSize: '17px', lineHeight: 1.8, color: "#2C3E50", wordBreak: 'keep-all' }}>
               {commentary.reframing}
             </p>
           </section>
@@ -103,7 +103,7 @@ export default async function VersePage({
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 32 }}>
             {/* Context */}
             <div className="glass" style={{ padding: 'clamp(24px, 5vw, 32px)', borderRadius: 28 }}>
-              <h3 style={{ fontSize: 13, fontWeight: 700, color: "#6B7A89", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h3 className="section-label" style={{ fontSize: 'clamp(11px, 3vw, 12px)', fontWeight: 700, color: "#6B7A89", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, wordBreak: 'keep-all' }}>
                 <BookOpen size={16} /> 성경 본문의 깊은 맥락
               </h3>
               <p style={{ fontSize: 'clamp(14px, 3.5vw, 15px)', lineHeight: 1.7, color: "#555", fontWeight: 500, wordBreak: 'keep-all' }}>
@@ -114,7 +114,7 @@ export default async function VersePage({
             {/* Pitfalls */}
             {commentary.pitfalls && commentary.pitfalls.length > 0 && (
               <div className="glass" style={{ padding: 'clamp(24px, 5vw, 32px)', borderRadius: 28 }}>
-                <h3 style={{ fontSize: 13, fontWeight: 700, color: "#6B7A89", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <h3 className="section-label" style={{ fontSize: 'clamp(11px, 3vw, 12px)', fontWeight: 700, color: "#6B7A89", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, wordBreak: 'keep-all' }}>
                   <MessageCircle size={16} /> 묵상할 때 경계할 마음
                 </h3>
                 <ul style={{ paddingLeft: 0, listStyle: 'none', fontSize: 'clamp(14px, 3.5vw, 15px)', color: "#555" }}>
